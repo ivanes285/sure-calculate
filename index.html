@@ -1,561 +1,325 @@
 <!DOCTYPE html>
 <html lang="es" class="">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calculadora de Surebets</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      body,
-      .bg-white,
-      .bg-gray-800,
-      input,
-      button,
-      .custom-select {
-        transition: background-color 0.3s ease, color 0.3s ease,
-          border-color 0.3s ease;
-      }
+        body, .bg-white, .bg-gray-800, input, button, .custom-select {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
     </style>
     <script>
-      tailwind.config = {
-        darkMode: "class",
-      }
+        tailwind.config = {
+            darkMode: "class",
+        }
     </script>
-  </head>
-  <body
-    class="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 font-sans"
-  >
-    <div
-      class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg"
-    >
-      <div class="flex justify-between items-center mb-6">
-        <div>
-          <h1
-            class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white"
-          >
-            Calculadora de Surebets
-          </h1>
-          <p class="text-sm text-gray-500 dark:text-gray-400">
-            Encuentra ganancias seguras
-          </p>
-        </div>
-        <button
-          id="darkModeToggle"
-          class="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <svg
-            id="sunIcon"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-            />
-          </svg>
-          <svg
-            id="moonIcon"
-            class="h-6 w-6 hidden"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-            />
-          </svg>
-        </button>
-      </div>
-
-      <div class="space-y-4">
-        <div>
-          <label
-            for="totalAmount"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >Monto total a apostar ($)</label
-          >
-          <input
-            type="number"
-            id="totalAmount"
-            class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Ej: 100"
-            step="0.01"
-          />
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >País A</label
-            >
-            <div
-              id="countryA-select"
-              class="custom-select mt-1 w-full relative"
-            >
-              <div
-                class="custom-select-trigger w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white flex items-center cursor-pointer focus:ring-blue-500 focus:border-blue-500"
-              >
-                <span class="custom-select-label flex items-center"
-                  >Seleccionar país...</span
-                >
-              </div>
-              <div
-                class="custom-select-options absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-60 overflow-y-auto hidden"
-              >
-                <input
-                  type="text"
-                  placeholder="Buscar..."
-                  class="w-full p-2 border-b border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white sticky top-0 outline-none"
-                />
-                <ul class="country-list p-2"></ul>
-              </div>
+</head>
+<body class="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 font-sans">
+    <div class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">Calculadora de Surebets</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Encuentra ganancias seguras</p>
             </div>
-          </div>
-          <div>
-            <label
-              for="oddsA"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >Cuota de A</label
-            >
-            <input
-              type="number"
-              id="oddsA"
-              class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Ej: 2.15"
-              step="0.01"
-            />
-          </div>
+            <button id="darkModeToggle" class="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <svg id="sunIcon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                <svg id="moonIcon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+            </button>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >País B</label
-            >
-            <div
-              id="countryB-select"
-              class="custom-select mt-1 w-full relative"
-            >
-              <div
-                class="custom-select-trigger w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white flex items-center cursor-pointer focus:ring-blue-500 focus:border-blue-500"
-              >
-                <span class="custom-select-label flex items-center"
-                  >Seleccionar país...</span
-                >
-              </div>
-              <div
-                class="custom-select-options absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-60 overflow-y-auto hidden"
-              >
-                <input
-                  type="text"
-                  placeholder="Buscar..."
-                  class="w-full p-2 border-b border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white sticky top-0 outline-none"
-                />
-                <ul class="country-list p-2"></ul>
-              </div>
+        <div class="space-y-4">
+            <div>
+                <label for="totalAmount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Monto total a apostar ($)</label>
+                <input type="number" id="totalAmount" class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Ej: 100" step="0.01">
             </div>
-          </div>
-          <div>
-            <label
-              for="oddsB"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >Cuota de B</label
-            >
-            <input
-              type="number"
-              id="oddsB"
-              class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Ej: 1.95"
-              step="0.01"
-            />
-          </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">País A</label>
+                    <div id="countryA-select" class="custom-select mt-1 w-full relative">
+                        <div class="custom-select-trigger w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white flex items-center cursor-pointer focus:ring-blue-500 focus:border-blue-500">
+                            <span class="custom-select-label flex items-center">Seleccionar país...</span>
+                        </div>
+                        <div class="custom-select-options absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-60 overflow-y-auto hidden">
+                            <input type="text" placeholder="Buscar..." class="w-full p-2 border-b border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white sticky top-0 outline-none">
+                            <ul class="country-list p-2"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label for="oddsA" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cuota de A</label>
+                    <input type="number" id="oddsA" class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Ej: 2.15" step="0.01">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">País B</label>
+                    <div id="countryB-select" class="custom-select mt-1 w-full relative">
+                        <div class="custom-select-trigger w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white flex items-center cursor-pointer focus:ring-blue-500 focus:border-blue-500">
+                            <span class="custom-select-label flex items-center">Seleccionar país...</span>
+                        </div>
+                        <div class="custom-select-options absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-60 overflow-y-auto hidden">
+                            <input type="text" placeholder="Buscar..." class="w-full p-2 border-b border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white sticky top-0 outline-none">
+                            <ul class="country-list p-2"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label for="oddsB" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cuota de B</label>
+                    <input type="number" id="oddsB" class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Ej: 1.95" step="0.01">
+                </div>
+            </div>
         </div>
-      </div>
 
-      <div class="mt-6 grid grid-cols-2 gap-4">
-        <button
-          id="clearBtn"
-          class="w-full bg-gray-500 text-white p-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 dark:focus:ring-offset-gray-800"
-        >
-          Limpiar
-        </button>
-        <button
-          id="calculateBtn"
-          class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800"
-        >
-          Calcular
-        </button>
-      </div>
+        <div class="mt-6 grid grid-cols-2 gap-4">
+            <button id="clearBtn" class="w-full bg-gray-500 text-white p-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 dark:focus:ring-offset-gray-800">Limpiar</button>
+            <button id="calculateBtn" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800">Calcular</button>
+        </div>
 
-      <div id="error" class="mt-4 text-red-500 text-center font-semibold"></div>
-      <div
-        id="resultContainer"
-        class="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6 hidden"
-      ></div>
+        <div id="error" class="mt-4 text-red-500 text-center font-semibold"></div>
+        <div id="resultContainer" class="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6 hidden"></div>
     </div>
 
     <script>
-      const countries = [
-        { name: "Albania", code: "AL" },
-        { name: "Alemania", code: "DE" },
-        { name: "Andorra", code: "AD" },
-        { name: "Argentina", code: "AR" },
-        { name: "Austria", code: "AT" },
-        { name: "Bélgica", code: "BE" },
-        { name: "Bielorrusia", code: "BY" },
-        { name: "Bolivia", code: "BO" },
-        { name: "Bosnia y Herzegovina", code: "BA" },
-        { name: "Brasil", code: "BR" },
-        { name: "Bulgaria", code: "BG" },
-        { name: "Canadá", code: "CA" },
-        { name: "Chile", code: "CL" },
-        { name: "Chipre", code: "CY" },
-        { name: "Ciudad del Vaticano", code: "VA" },
-        { name: "Colombia", code: "CO" },
-        { name: "Costa Rica", code: "CR" },
-        { name: "Croacia", code: "HR" },
-        { name: "Cuba", code: "CU" },
-        { name: "Dinamarca", code: "DK" },
-        { name: "Ecuador", code: "EC" },
-        { name: "El Salvador", code: "SV" },
-        { name: "Eslovaquia", code: "SK" },
-        { name: "Eslovenia", code: "SI" },
-        { name: "España", code: "ES" },
-        { name: "Estados Unidos de América", code: "US" },
-        { name: "Estonia", code: "EE" },
-        { name: "Finlandia", code: "FI" },
-        { name: "Francia", code: "FR" },
-        { name: "Grecia", code: "GR" },
-        { name: "Guatemala", code: "GT" },
-        { name: "Honduras", code: "HN" },
-        { name: "Hungría", code: "HU" },
-        { name: "Irlanda", code: "IE" },
-        { name: "Islandia", code: "IS" },
-        { name: "Italia", code: "IT" },
-        { name: "Letonia", code: "LV" },
-        { name: "Lituania", code: "LT" },
-        { name: "Luxemburgo", code: "LU" },
-        { name: "Malta", code: "MT" },
-        { name: "México", code: "MX" },
-        { name: "Moldavia", code: "MD" },
-        { name: "Mónaco", code: "MC" },
-        { name: "Montenegro", code: "ME" },
-        { name: "Nicaragua", code: "NI" },
-        { name: "Noruega", code: "NO" },
-        { name: "Países Bajos", code: "NL" },
-        { name: "Panamá", code: "PA" },
-        { name: "Paraguay", code: "PY" },
-        { name: "Perú", code: "PE" },
-        { name: "Polonia", code: "PL" },
-        { name: "Portugal", code: "PT" },
-        { name: "Puerto Rico", code: "PR" },
-        { name: "Reino Unido", code: "GB" },
-        { name: "República Checa", code: "CZ" },
-        { name: "República Dominicana", code: "DO" },
-        { name: "Rumanía", code: "RO" },
-        { name: "Rusia", code: "RU" },
-        { name: "San Marino", code: "SM" },
-        { name: "Serbia", code: "RS" },
-        { name: "Suecia", code: "SE" },
-        { name: "Suiza", code: "CH" },
-        { name: "Turquía", code: "TR" },
-        { name: "Ucrania", code: "UA" },
-        { name: "Uruguay", code: "UY" },
-        { name: "Venezuela", code: "VE" },
-      ]
+        const countries = [
+            { name: 'Albania', code: 'AL' }, { name: 'Alemania', code: 'DE' }, { name: 'Andorra', code: 'AD' }, { name: 'Argentina', code: 'AR' }, { name: 'Austria', code: 'AT' }, { name: 'Bélgica', code: 'BE' }, { name: 'Bielorrusia', code: 'BY' }, { name: 'Bolivia', code: 'BO' }, { name: 'Bosnia y Herzegovina', code: 'BA' }, { name: 'Brasil', code: 'BR' }, { name: 'Bulgaria', code: 'BG' }, { name: 'Canadá', code: 'CA' }, { name: 'Chile', code: 'CL' }, { name: 'Chipre', code: 'CY' }, { name: 'Ciudad del Vaticano', code: 'VA' }, { name: 'Colombia', code: 'CO' }, { name: 'Costa Rica', code: 'CR' }, { name: 'Croacia', code: 'HR' }, { name: 'Cuba', code: 'CU' }, { name: 'Dinamarca', code: 'DK' }, { name: 'Ecuador', code: 'EC' }, { name: 'El Salvador', code: 'SV' }, { name: 'Eslovaquia', code: 'SK' }, { name: 'Eslovenia', code: 'SI' }, { name: 'España', code: 'ES' }, { name: 'Estados Unidos de América', code: 'US' }, { name: 'Estonia', code: 'EE' }, { name: 'Finlandia', code: 'FI' }, { name: 'Francia', code: 'FR' }, { name: 'Grecia', code: 'GR' }, { name: 'Guatemala', code: 'GT' }, { name: 'Honduras', code: 'HN' }, { name: 'Hungría', code: 'HU' }, { name: 'Irlanda', code: 'IE' }, { name: 'Islandia', code: 'IS' }, { name: 'Italia', code: 'IT' }, { name: 'Letonia', code: 'LV' }, { name: 'Lituania', code: 'LT' }, { name: 'Luxemburgo', code: 'LU' }, { name: 'Malta', code: 'MT' }, { name: 'México', code: 'MX' }, { name: 'Moldavia', code: 'MD' }, { name: 'Mónaco', code: 'MC' }, { name: 'Montenegro', code: 'ME' }, { name: 'Nicaragua', code: 'NI' }, { name: 'Noruega', code: 'NO' }, { name: 'Países Bajos', code: 'NL' }, { name: 'Panamá', code: 'PA' }, { name: 'Paraguay', code: 'PY' }, { name: 'Perú', code: 'PE' }, { name: 'Polonia', code: 'PL' }, { name: 'Portugal', code: 'PT' }, { name: 'Puerto Rico', code: 'PR' }, { name: 'Reino Unido', code: 'GB' }, { name: 'República Checa', code: 'CZ' }, { name: 'República Dominicana', code: 'DO' }, { name: 'Rumanía', code: 'RO' }, { name: 'Rusia', code: 'RU' }, { name: 'San Marino', code: 'SM' }, { name: 'Serbia', code: 'RS' }, { name: 'Suecia', code: 'SE' }, { name: 'Suiza', code: 'CH' }, { name: 'Turquía', code: 'TR' }, { name: 'Ucrania', code: 'UA' }, { name: 'Uruguay', code: 'UY' }, { name: 'Venezuela', code: 'VE' }
+        ];
 
-      const totalAmountInput = document.getElementById("totalAmount")
-      const oddsAInput = document.getElementById("oddsA")
-      const oddsBInput = document.getElementById("oddsB")
-      const resultContainer = document.getElementById("resultContainer")
-      const errorDiv = document.getElementById("error")
-      const calculateBtn = document.getElementById("calculateBtn")
-      const clearBtn = document.getElementById("clearBtn")
-      const darkModeToggle = document.getElementById("darkModeToggle")
-      const sunIcon = document.getElementById("sunIcon")
-      const moonIcon = document.getElementById("moonIcon")
+        const totalAmountInput = document.getElementById("totalAmount");
+        const oddsAInput = document.getElementById("oddsA");
+        const oddsBInput = document.getElementById("oddsB");
+        const resultContainer = document.getElementById("resultContainer");
+        const errorDiv = document.getElementById("error");
+        const calculateBtn = document.getElementById("calculateBtn");
+        const clearBtn = document.getElementById("clearBtn");
+        const darkModeToggle = document.getElementById("darkModeToggle");
+        const sunIcon = document.getElementById("sunIcon");
+        const moonIcon = document.getElementById("moonIcon");
+        
+        const countryASelect = document.getElementById('countryA-select');
+        const countryBSelect = document.getElementById('countryB-select');
+        let selectedCountryA = null;
+        let selectedCountryB = null;
 
-      const countryASelect = document.getElementById("countryA-select")
-      const countryBSelect = document.getElementById("countryB-select")
-      let selectedCountryA = null
-      let selectedCountryB = null
+        function renderCountryList(container, filteredCountries) {
+            const listContainer = container.querySelector('.country-list');
+            listContainer.innerHTML = '';
+            filteredCountries.forEach(country => {
+                const option = document.createElement('li');
+                option.className = 'custom-select-option p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center';
+                option.innerHTML = `<img loading="lazy" width="20" srcset="https://flagcdn.com/w40/${country.code.toLowerCase()}.png 2x" src="https://flagcdn.com/w20/${country.code.toLowerCase()}.png" alt="" style="margin-right: 5px;" />${country.name}`;
+                
+                option.addEventListener('click', () => {
+                    const label = container.querySelector('.custom-select-label');
+                    label.innerHTML = `<img loading="lazy" width="20" srcset="https://flagcdn.com/w40/${country.code.toLowerCase()}.png 2x" src="https://flagcdn.com/w20/${country.code.toLowerCase()}.png" alt="" style="margin-right: 5px;" />${country.name}`;
+                    if (container.id === 'countryA-select') {
+                        selectedCountryA = country;
+                    } else {
+                        selectedCountryB = country;
+                    }
+                    container.querySelector('.custom-select-options').classList.add('hidden');
+                });
+                listContainer.appendChild(option);
+            });
+        }
 
-      function renderCountryList(container, filteredCountries) {
-        const listContainer = container.querySelector(".country-list")
-        listContainer.innerHTML = ""
-        filteredCountries.forEach((country) => {
-          const option = document.createElement("li")
-          option.className =
-            "custom-select-option p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center"
-          option.innerHTML = `<img loading="lazy" width="20" srcset="https://flagcdn.com/w40/${country.code.toLowerCase()}.png 2x" src="https://flagcdn.com/w20/${country.code.toLowerCase()}.png" alt="" style="margin-right: 5px;" />${
-            country.name
-          }`
+        function setupCustomSelect(container) {
+            const trigger = container.querySelector('.custom-select-trigger');
+            const optionsContainer = container.querySelector('.custom-select-options');
+            const searchInput = optionsContainer.querySelector('input[type="text"]');
 
-          option.addEventListener("click", () => {
-            const label = container.querySelector(".custom-select-label")
-            label.innerHTML = `<img loading="lazy" width="20" srcset="https://flagcdn.com/w40/${country.code.toLowerCase()}.png 2x" src="https://flagcdn.com/w20/${country.code.toLowerCase()}.png" alt="" style="margin-right: 5px;" />${
-              country.name
-            }`
-            if (container.id === "countryA-select") {
-              selectedCountryA = country
-            } else {
-              selectedCountryB = country
+            renderCountryList(container, countries);
+
+            trigger.addEventListener('click', () => {
+                optionsContainer.classList.toggle('hidden');
+                searchInput.focus();
+                searchInput.value = '';
+                renderCountryList(container, countries);
+            });
+
+            searchInput.addEventListener('input', (event) => {
+                const searchTerm = event.target.value.toLowerCase();
+                const filtered = countries.filter(country => country.name.toLowerCase().includes(searchTerm));
+                renderCountryList(container, filtered);
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!container.contains(event.target)) {
+                    optionsContainer.classList.add('hidden');
+                }
+            });
+        }
+        
+        setupCustomSelect(countryASelect);
+        setupCustomSelect(countryBSelect);
+        
+        // Función para manejar la coma y el punto en los campos de entrada
+        function handleDecimalInput(event) {
+            const input = event.target;
+            input.value = input.value.replace(',', '.');
+        }
+
+        totalAmountInput.addEventListener('input', handleDecimalInput);
+        oddsAInput.addEventListener('input', handleDecimalInput);
+        oddsBInput.addEventListener('input', handleDecimalInput);
+
+        function calculateBets() {
+            errorDiv.textContent = "";
+            resultContainer.innerHTML = "";
+            resultContainer.classList.add("hidden");
+
+            const totalAmount = parseFloat(totalAmountInput.value);
+            const oddsA = parseFloat(oddsAInput.value);
+            const oddsB = parseFloat(oddsBInput.value);
+            
+            const teamAName = selectedCountryA ? selectedCountryA.name : null;
+            const teamBName = selectedCountryB ? selectedCountryB.name : null;
+            const teamACode = selectedCountryA ? selectedCountryA.code : null;
+            const teamBCode = selectedCountryB ? selectedCountryB.code : null;
+
+            if (isNaN(totalAmount) || totalAmount <= 0) {
+                errorDiv.textContent = "Por favor, ingresa un monto total válido y mayor a 0.";
+                return;
             }
-            container
-              .querySelector(".custom-select-options")
-              .classList.add("hidden")
-          })
-          listContainer.appendChild(option)
-        })
-      }
+            if (isNaN(oddsA) || isNaN(oddsB) || oddsA <= 1 || oddsB <= 1) {
+                errorDiv.textContent = "Por favor, ingresa cuotas válidas y mayores a 1.";
+                return;
+            }
+            if (!selectedCountryA || !selectedCountryB) {
+                errorDiv.textContent = "Por favor, selecciona los dos países.";
+                return;
+            }
 
-      function setupCustomSelect(container) {
-        const trigger = container.querySelector(".custom-select-trigger")
-        const optionsContainer = container.querySelector(
-          ".custom-select-options"
-        )
-        const searchInput = optionsContainer.querySelector('input[type="text"]')
+            const margin = 1 / oddsA + 1 / oddsB;
 
-        renderCountryList(container, countries)
+            if (margin < 1) {
+                const stakeA = totalAmount / (1 + oddsA / oddsB);
+                const stakeB = totalAmount - stakeA;
+                const returnAmount = stakeA * oddsA;
+                const profit = returnAmount - totalAmount;
 
-        trigger.addEventListener("click", () => {
-          optionsContainer.classList.toggle("hidden")
-          searchInput.focus()
-          searchInput.value = ""
-          renderCountryList(container, countries)
-        })
+                let favoriteTeam, favoriteOdds, betOnFavorite, underdogTeam, underdogOdds, betOnUnderdog;
 
-        searchInput.addEventListener("input", (event) => {
-          const searchTerm = event.target.value.toLowerCase()
-          const filtered = countries.filter((country) =>
-            country.name.toLowerCase().includes(searchTerm)
-          )
-          renderCountryList(container, filtered)
-        })
+                if (oddsA < oddsB) {
+                    favoriteTeam = teamAName;
+                    favoriteOdds = oddsA;
+                    betOnFavorite = stakeA;
+                    underdogTeam = teamBName;
+                    underdogOdds = oddsB;
+                    betOnUnderdog = stakeB;
+                } else {
+                    favoriteTeam = teamBName;
+                    favoriteOdds = oddsB;
+                    betOnFavorite = stakeB;
+                    underdogTeam = teamAName;
+                    underdogOdds = oddsA;
+                    betOnUnderdog = stakeA;
+                }
+                
+                const returnFavorite = betOnFavorite * favoriteOdds;
+                const returnUnderdog = betOnUnderdog * underdogOdds;
 
-        document.addEventListener("click", (event) => {
-          if (!container.contains(event.target)) {
-            optionsContainer.classList.add("hidden")
-          }
-        })
-      }
-
-      setupCustomSelect(countryASelect)
-      setupCustomSelect(countryBSelect)
-
-      function calculateBets() {
-        errorDiv.textContent = ""
-        resultContainer.innerHTML = ""
-        resultContainer.classList.add("hidden")
-
-        const totalAmount = parseFloat(totalAmountInput.value)
-        const oddsA = parseFloat(oddsAInput.value)
-        const oddsB = parseFloat(oddsBInput.value)
-
-        const teamAName = selectedCountryA ? selectedCountryA.name : null
-        const teamBName = selectedCountryB ? selectedCountryB.name : null
-        const teamACode = selectedCountryA ? selectedCountryA.code : null
-        const teamBCode = selectedCountryB ? selectedCountryB.code : null
-
-        if (isNaN(totalAmount) || totalAmount <= 0) {
-          errorDiv.textContent =
-            "Por favor, ingresa un monto total válido y mayor a 0."
-          return
-        }
-        if (isNaN(oddsA) || isNaN(oddsB) || oddsA <= 1 || oddsB <= 1) {
-          errorDiv.textContent =
-            "Por favor, ingresa cuotas válidas y mayores a 1."
-          return
-        }
-        if (!selectedCountryA || !selectedCountryB) {
-          errorDiv.textContent = "Por favor, selecciona los dos países."
-          return
-        }
-
-        const margin = 1 / oddsA + 1 / oddsB
-
-        if (margin < 1) {
-          const stakeA = totalAmount / (1 + oddsA / oddsB)
-          const stakeB = totalAmount - stakeA
-          const returnAmount = stakeA * oddsA
-          const profit = returnAmount - totalAmount
-
-          let favoriteTeam,
-            favoriteOdds,
-            betOnFavorite,
-            underdogTeam,
-            underdogOdds,
-            betOnUnderdog
-
-          if (oddsA < oddsB) {
-            favoriteTeam = teamAName
-            favoriteOdds = oddsA
-            betOnFavorite = stakeA
-            underdogTeam = teamBName
-            underdogOdds = oddsB
-            betOnUnderdog = stakeB
-          } else {
-            favoriteTeam = teamBName
-            favoriteOdds = oddsB
-            betOnFavorite = stakeB
-            underdogTeam = teamAName
-            underdogOdds = oddsA
-            betOnUnderdog = stakeA
-          }
-
-          const returnFavorite = betOnFavorite * favoriteOdds
-          const returnUnderdog = betOnUnderdog * underdogOdds
-
-          const resultHTML = `
+                const resultHTML = `
                     <h2 class="text-xl font-bold text-center text-green-600 dark:text-green-400 mb-4">¡Oportunidad de Surebet!</h2>
                     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg text-center mb-4">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Margen a tu favor</p>
-                        <p class="text-2xl font-bold text-green-600 dark:text-green-400">${(
-                          (1 - margin) *
-                          100
-                        ).toFixed(2)}%</p>
+                        <p class="text-2xl font-bold text-green-600 dark:text-green-400">${((1 - margin) * 100).toFixed(2)}%</p>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600 flex items-center flex-col">
-                            <p class="font-semibold text-gray-800 dark:text-white flex items-center justify-center">${
-                              selectedCountryA
-                                ? `<img loading="lazy" width="20" srcset="https://flagcdn.com/w40/${selectedCountryA.code.toLowerCase()}.png 2x" src="https://flagcdn.com/w20/${selectedCountryA.code.toLowerCase()}.png" alt="" style="margin-right: 5px;" />`
-                                : ""
-                            } Apostar en ${teamAName}</p>
-                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">$${stakeA.toFixed(
-                              2
-                            )}</p>
+                            <p class="font-semibold text-gray-800 dark:text-white flex items-center justify-center">${selectedCountryA ? `<img loading="lazy" width="20" srcset="https://flagcdn.com/w40/${selectedCountryA.code.toLowerCase()}.png 2x" src="https://flagcdn.com/w20/${selectedCountryA.code.toLowerCase()}.png" alt="" style="margin-right: 5px;" />` : ''} Apostar en ${teamAName}</p>
+                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">$${stakeA.toFixed(2)}</p>
                             <p class="text-sm text-gray-500 dark:text-gray-400">a cuota ${oddsA}</p>
                         </div>
                         <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600 flex items-center flex-col">
-                            <p class="font-semibold text-gray-800 dark:text-white flex items-center justify-center">${
-                              selectedCountryB
-                                ? `<img loading="lazy" width="20" srcset="https://flagcdn.com/w40/${selectedCountryB.code.toLowerCase()}.png 2x" src="https://flagcdn.com/w20/${selectedCountryB.code.toLowerCase()}.png" alt="" style="margin-right: 5px;" />`
-                                : ""
-                            } Apostar en ${teamBName}</p>
-                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">$${stakeB.toFixed(
-                              2
-                            )}</p>
+                            <p class="font-semibold text-gray-800 dark:text-white flex items-center justify-center">${selectedCountryB ? `<img loading="lazy" width="20" srcset="https://flagcdn.com/w40/${selectedCountryB.code.toLowerCase()}.png 2x" src="https://flagcdn.com/w20/${selectedCountryB.code.toLowerCase()}.png" alt="" style="margin-right: 5px;" />` : ''} Apostar en ${teamBName}</p>
+                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">$${stakeB.toFixed(2)}</p>
                             <p class="text-sm text-gray-500 dark:text-gray-400">a cuota ${oddsB}</p>
                         </div>
                     </div>
                     <div class="mt-4 bg-blue-100 dark:bg-blue-900/50 border-l-4 border-blue-500 p-4 rounded-r-lg">
                         <p class="font-bold text-gray-800 dark:text-white">Resultados Garantizados:</p>
                         <ul class="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 mt-2">
-                            <li>Inversión total: <strong>$${totalAmount.toFixed(
-                              2
-                            )}</strong></li>
-                            <li>Retorno garantizado: <strong>$${returnAmount.toFixed(
-                              2
-                            )}</strong></li>
-                            <li>Ganancia neta segura: <strong class="text-green-600 dark:text-green-400">$${profit.toFixed(
-                              2
-                            )}</strong></li>
+                            <li>Inversión total: <strong>$${totalAmount.toFixed(2)}</strong></li>
+                            <li>Retorno garantizado: <strong>$${returnAmount.toFixed(2)}</strong></li>
+                            <li>Ganancia neta segura: <strong class="text-green-600 dark:text-green-400">$${profit.toFixed(2)}</strong></li>
                         </ul>
                     </div>
                     <div class="mt-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg text-sm text-gray-700 dark:text-gray-300">
-                        <p>Apuesta <strong>$${betOnFavorite.toFixed(
-                          2
-                        )}</strong> en ${favoriteTeam} (cuota ${favoriteOdds}).</p>
-                        <p>Apuesta <strong>$${betOnUnderdog.toFixed(
-                          2
-                        )}</strong> en ${underdogTeam} (cuota ${underdogOdds}).</p>
+                        <p>Apuesta <strong>$${betOnFavorite.toFixed(2)}</strong> en ${favoriteTeam} (cuota ${favoriteOdds}).</p>
+                        <p>Apuesta <strong>$${betOnUnderdog.toFixed(2)}</strong> en ${underdogTeam} (cuota ${underdogOdds}).</p>
                         <br>
-                        <p>Si gana ${favoriteTeam}: Recuperas <strong>$${returnFavorite.toFixed(
-            2
-          )}</strong> (ganancia neta: <strong>$${(
-            returnFavorite - totalAmount
-          ).toFixed(2)}</strong>).</p>
-                        <p>Si gana ${underdogTeam}: Recuperas <strong>$${returnUnderdog.toFixed(
-            2
-          )}</strong> (ganancia neta: <strong>$${(
-            returnUnderdog - totalAmount
-          ).toFixed(2)}</strong>).</p>
+                        <p>Si gana ${favoriteTeam}: Recuperas <strong>$${returnFavorite.toFixed(2)}</strong> (ganancia neta: <strong>$${(returnFavorite - totalAmount).toFixed(2)}</strong>).</p>
+                        <p>Si gana ${underdogTeam}: Recuperas <strong>$${returnUnderdog.toFixed(2)}</strong> (ganancia neta: <strong>$${(returnUnderdog - totalAmount).toFixed(2)}</strong>).</p>
                     </div>
-                `
-          resultContainer.innerHTML = resultHTML
-        } else {
-          const bookieMargin = (margin - 1) * 100
-          const guaranteedLoss = (totalAmount * bookieMargin) / 100
+                `;
+                resultContainer.innerHTML = resultHTML;
+            } else {
+                const bookieMargin = (margin - 1) * 100;
+                const guaranteedLoss = (totalAmount * bookieMargin) / 100;
 
-          const resultHTML = `
+                const resultHTML = `
                     <h2 class="text-xl font-bold text-center text-red-600 dark:text-red-400 mb-4">No hay Surebet</h2>
                     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg text-center">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Margen de la Casa de Apuestas</p>
-                        <p class="text-2xl font-bold text-red-600 dark:text-red-400">${bookieMargin.toFixed(
-                          2
-                        )}%</p>
+                        <p class="text-2xl font-bold text-red-600 dark:text-red-400">${bookieMargin.toFixed(2)}%</p>
                     </div>
                     <div class="mt-4 bg-yellow-100 dark:bg-yellow-900/50 border-l-4 border-yellow-500 p-4 rounded-r-lg">
                         <p class="font-semibold text-gray-800 dark:text-white">Información</p>
-                        <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">Apostar en ambos resultados con estas cuotas resultará en una pérdida garantizada de aproximadamente <strong>$${guaranteedLoss.toFixed(
-                          2
-                        )}</strong> sobre tu inversión de $${totalAmount.toFixed(
-            2
-          )}.</p>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">Apostar en ambos resultados con estas cuotas resultará en una pérdida garantizada de aproximadamente <strong>$${guaranteedLoss.toFixed(2)}</strong> sobre tu inversión de $${totalAmount.toFixed(2)}.</p>
                     </div>
-                `
-          resultContainer.innerHTML = resultHTML
+                `;
+                resultContainer.innerHTML = resultHTML;
+            }
+            resultContainer.classList.remove("hidden");
         }
-        resultContainer.classList.remove("hidden")
-      }
 
-      function clearForm() {
-        totalAmountInput.value = ""
-        oddsAInput.value = ""
-        oddsBInput.value = ""
-        countryASelect.querySelector(".custom-select-label").innerHTML =
-          "Seleccionar país..."
-        countryBSelect.querySelector(".custom-select-label").innerHTML =
-          "Seleccionar país..."
-        selectedCountryA = null
-        selectedCountryB = null
-        errorDiv.textContent = ""
-        resultContainer.innerHTML = ""
-        resultContainer.classList.add("hidden")
-        totalAmountInput.focus()
-      }
+        function clearForm() {
+            totalAmountInput.value = "";
+            oddsAInput.value = "";
+            oddsBInput.value = "";
+            countryASelect.querySelector('.custom-select-label').innerHTML = 'Seleccionar país...';
+            countryBSelect.querySelector('.custom-select-label').innerHTML = 'Seleccionar país...';
+            selectedCountryA = null;
+            selectedCountryB = null;
+            errorDiv.textContent = "";
+            resultContainer.innerHTML = "";
+            resultContainer.classList.add("hidden");
+            totalAmountInput.focus();
+        }
 
-      function applyTheme(isDark) {
-        if (isDark) {
-          document.documentElement.classList.add("dark")
-          sunIcon.classList.add("hidden")
-          moonIcon.classList.remove("hidden")
+        function applyTheme(isDark) {
+            if (isDark) {
+                document.documentElement.classList.add("dark");
+                sunIcon.classList.add("hidden");
+                moonIcon.classList.remove("hidden");
+            } else {
+                document.documentElement.classList.remove("dark");
+                sunIcon.classList.remove("hidden");
+                moonIcon.classList.add("hidden");
+            }
+        }
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle("dark");
+            localStorage.setItem("darkMode", isDark);
+            applyTheme(isDark);
+        }
+
+        calculateBtn.addEventListener("click", calculateBets);
+        clearBtn.addEventListener("click", clearForm);
+        darkModeToggle.addEventListener("click", toggleDarkMode);
+
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const savedTheme = localStorage.getItem("darkMode");
+        if (savedTheme !== null) {
+            applyTheme(savedTheme === "true");
         } else {
-          document.documentElement.classList.remove("dark")
-          sunIcon.classList.remove("hidden")
-          moonIcon.classList.add("hidden")
+            applyTheme(prefersDark);
         }
-      }
-
-      function toggleDarkMode() {
-        const isDark = document.documentElement.classList.toggle("dark")
-        localStorage.setItem("darkMode", isDark)
-        applyTheme(isDark)
-      }
-
-      calculateBtn.addEventListener("click", calculateBets)
-      clearBtn.addEventListener("click", clearForm)
-      darkModeToggle.addEventListener("click", toggleDarkMode)
-
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches
-      const savedTheme = localStorage.getItem("darkMode")
-      if (savedTheme !== null) {
-        applyTheme(savedTheme === "true")
-      } else {
-        applyTheme(prefersDark)
-      }
     </script>
-  </body>
+</body>
 </html>
