@@ -9,6 +9,47 @@
         body, .bg-white, .bg-gray-800, input, button, .custom-select {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
+
+        /* Estilos del Toggle Switch */
+        .toggle-switch-container {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+        .toggle-switch-container input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
     </style>
     <script>
         tailwind.config = {
@@ -32,7 +73,7 @@
         <div class="space-y-4">
             <div>
                 <label for="totalAmount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Monto total a apostar ($)</label>
-                <input type="number" id="totalAmount" class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Ej: 100" step="0.01">
+                <input type="text" id="totalAmount" class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Ej: 100">
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -50,7 +91,7 @@
                 </div>
                 <div>
                     <label for="oddsA" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cuota de A</label>
-                    <input type="number" id="oddsA" class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Ej: 2.15" step="0.01">
+                    <input type="text" id="oddsA" class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Ej: 2.15">
                 </div>
             </div>
 
@@ -69,9 +110,20 @@
                 </div>
                 <div>
                     <label for="oddsB" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cuota de B</label>
-                    <input type="number" id="oddsB" class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Ej: 1.95" step="0.01">
+                    <input type="text" id="oddsB" class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Ej: 1.95">
                 </div>
             </div>
+            
+            <div class="flex items-center mt-4">
+                <label class="toggle-switch-container">
+                    <input type="checkbox" id="classicSurebetToggle">
+                    <span class="slider"></span>
+                </label>
+                <label for="classicSurebetToggle" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+                    Ganancia Uniforme
+                </label>
+            </div>
+            <div id="strategyText" class="mt-2 p-3 rounded-md border text-sm flex items-center min-h-[60px] shadow-sm"></div>
         </div>
 
         <div class="mt-6 grid grid-cols-2 gap-4">
@@ -91,6 +143,8 @@
         const totalAmountInput = document.getElementById("totalAmount");
         const oddsAInput = document.getElementById("oddsA");
         const oddsBInput = document.getElementById("oddsB");
+        const classicSurebetToggle = document.getElementById("classicSurebetToggle");
+        const strategyText = document.getElementById("strategyText");
         const resultContainer = document.getElementById("resultContainer");
         const errorDiv = document.getElementById("error");
         const calculateBtn = document.getElementById("calculateBtn");
@@ -156,24 +210,31 @@
         setupCustomSelect(countryASelect);
         setupCustomSelect(countryBSelect);
         
-        // Función para manejar la coma y el punto en los campos de entrada
-        function handleDecimalInput(event) {
-            const input = event.target;
-            input.value = input.value.replace(',', '.');
+        function updateStrategyText() {
+            if (classicSurebetToggle.checked) {
+                strategyText.innerHTML = `<p class="font-bold mb-1 text-blue-600 dark:text-blue-400">🛡️ Estrategia Clásica</p><p class="text-gray-700 dark:text-gray-300">Aseguras una <strong>ganancia pequeña y garantizada</strong> sin importar quién gane.</p>`;
+                strategyText.classList.remove('border-gray-300', 'border-yellow-500');
+                strategyText.classList.add('border-l-4', 'border-blue-400', 'dark:border-blue-500');
+            } else {
+                strategyText.innerHTML = `<p class="font-bold mb-1 text-yellow-500 dark:text-yellow-400">💰 Estrategia de Mayor Ganancia</p><p class="text-gray-700 dark:text-gray-300">Maximizas tu ganancia si gana el desfavorecido. Si gana el favorito, recuperas tu inversión.</p>`;
+                strategyText.classList.remove('border-blue-400', 'dark:border-blue-500');
+                strategyText.classList.add('border-l-4', 'border-yellow-500');
+            }
         }
-
-        totalAmountInput.addEventListener('input', handleDecimalInput);
-        oddsAInput.addEventListener('input', handleDecimalInput);
-        oddsBInput.addEventListener('input', handleDecimalInput);
 
         function calculateBets() {
             errorDiv.textContent = "";
             resultContainer.innerHTML = "";
             resultContainer.classList.add("hidden");
 
-            const totalAmount = parseFloat(totalAmountInput.value);
-            const oddsA = parseFloat(oddsAInput.value);
-            const oddsB = parseFloat(oddsBInput.value);
+            const totalAmountStr = totalAmountInput.value.replace(',', '.');
+            const oddsAStr = oddsAInput.value.replace(',', '.');
+            const oddsBStr = oddsBInput.value.replace(',', '.');
+
+            const totalAmount = parseFloat(totalAmountStr);
+            const oddsA = parseFloat(oddsAStr);
+            const oddsB = parseFloat(oddsBStr);
+            const useClassicSurebet = classicSurebetToggle.checked;
             
             const teamAName = selectedCountryA ? selectedCountryA.name : null;
             const teamBName = selectedCountryB ? selectedCountryB.name : null;
@@ -196,64 +257,81 @@
             const margin = 1 / oddsA + 1 / oddsB;
 
             if (margin < 1) {
-                const stakeA = totalAmount / (1 + oddsA / oddsB);
-                const stakeB = totalAmount - stakeA;
-                const returnAmount = stakeA * oddsA;
-                const profit = returnAmount - totalAmount;
-
-                let favoriteTeam, favoriteOdds, betOnFavorite, underdogTeam, underdogOdds, betOnUnderdog;
+                let favoriteTeam, favoriteOdds, underdogTeam, underdogOdds;
+                let betOnFavorite, betOnUnderdog;
+                let profitFavorite, profitUnderdog, returnFavorite, returnUnderdog;
+                let strategyDescription, strategyDetails;
 
                 if (oddsA < oddsB) {
                     favoriteTeam = teamAName;
                     favoriteOdds = oddsA;
-                    betOnFavorite = stakeA;
                     underdogTeam = teamBName;
                     underdogOdds = oddsB;
-                    betOnUnderdog = stakeB;
                 } else {
                     favoriteTeam = teamBName;
                     favoriteOdds = oddsB;
-                    betOnFavorite = stakeB;
                     underdogTeam = teamAName;
                     underdogOdds = oddsA;
-                    betOnUnderdog = stakeA;
                 }
-                
-                const returnFavorite = betOnFavorite * favoriteOdds;
-                const returnUnderdog = betOnUnderdog * underdogOdds;
+
+                if (useClassicSurebet) {
+                    // Lógica de Surebet Tradicional (ganancia uniforme)
+                    betOnFavorite = totalAmount / (1 + favoriteOdds / underdogOdds);
+                    betOnUnderdog = totalAmount - betOnFavorite;
+                    
+                    returnFavorite = betOnFavorite * favoriteOdds;
+                    returnUnderdog = betOnUnderdog * underdogOdds;
+
+                    profitFavorite = returnFavorite - totalAmount;
+                    profitUnderdog = returnUnderdog - totalAmount;
+
+                    strategyDescription = "Estrategia Tradicional: Ganancia garantizada";
+                    strategyDetails = `<p>Si gana ${favoriteTeam}: Recuperas <strong>$${returnFavorite.toFixed(2)}</strong> (ganancia neta: <strong>$${profitFavorite.toFixed(2)}</strong>).</p>
+                                       <p>Si gana ${underdogTeam}: Recuperas <strong>$${returnUnderdog.toFixed(2)}</strong> (ganancia neta: <strong>$${profitUnderdog.toFixed(2)}</strong>).</p>`;
+                } else {
+                    // Lógica de Estrategia de Mayor Ganancia (recuperar inversión en el favorito)
+                    betOnFavorite = totalAmount / favoriteOdds;
+                    betOnUnderdog = totalAmount - betOnFavorite;
+
+                    returnFavorite = betOnFavorite * favoriteOdds;
+                    returnUnderdog = betOnUnderdog * underdogOdds;
+
+                    profitFavorite = returnFavorite - totalAmount;
+                    profitUnderdog = returnUnderdog - totalAmount;
+
+                    strategyDescription = "Estrategia de Mayor Ganancia";
+                    strategyDetails = `<p>Si gana ${favoriteTeam}: Recuperas <strong>$${returnFavorite.toFixed(2)}</strong> (ganancia neta: <strong>$${profitFavorite.toFixed(2)}</strong>).</p>
+                                       <p>Si gana ${underdogTeam}: Recuperas <strong>$${returnUnderdog.toFixed(2)}</strong> (ganancia neta: <strong>$${profitUnderdog.toFixed(2)}</strong>).</p>`;
+                }
+
+                const teamAFlag = `<img loading="lazy" width="20" srcset="https://flagcdn.com/w40/${selectedCountryA.code.toLowerCase()}.png 2x" src="https://flagcdn.com/w20/${selectedCountryA.code.toLowerCase()}.png" alt="" style="margin-right: 5px;" />`;
+                const teamBFlag = `<img loading="lazy" width="20" srcset="https://flagcdn.com/w40/${selectedCountryB.code.toLowerCase()}.png 2x" src="https://flagcdn.com/w20/${selectedCountryB.code.toLowerCase()}.png" alt="" style="margin-right: 5px;" />`;
+
 
                 const resultHTML = `
-                    <h2 class="text-xl font-bold text-center text-green-600 dark:text-green-400 mb-4">¡Oportunidad de Surebet!</h2>
+                    <h2 class="text-xl font-bold text-center text-green-600 dark:text-green-400 mb-4">${strategyDescription}</h2>
                     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg text-center mb-4">
                         <p class="text-sm text-gray-600 dark:text-gray-300">Margen a tu favor</p>
                         <p class="text-2xl font-bold text-green-600 dark:text-green-400">${((1 - margin) * 100).toFixed(2)}%</p>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600 flex items-center flex-col">
-                            <p class="font-semibold text-gray-800 dark:text-white flex items-center justify-center">${selectedCountryA ? `<img loading="lazy" width="20" srcset="https://flagcdn.com/w40/${selectedCountryA.code.toLowerCase()}.png 2x" src="https://flagcdn.com/w20/${selectedCountryA.code.toLowerCase()}.png" alt="" style="margin-right: 5px;" />` : ''} Apostar en ${teamAName}</p>
-                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">$${stakeA.toFixed(2)}</p>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">a cuota ${oddsA}</p>
+                            <p class="font-semibold text-gray-800 dark:text-white flex items-center justify-center">${oddsA === favoriteOdds ? teamAFlag : teamBFlag} Apostar en ${favoriteTeam}</p>
+                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">$${betOnFavorite.toFixed(2)}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">a cuota ${favoriteOdds}</p>
                         </div>
                         <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600 flex items-center flex-col">
-                            <p class="font-semibold text-gray-800 dark:text-white flex items-center justify-center">${selectedCountryB ? `<img loading="lazy" width="20" srcset="https://flagcdn.com/w40/${selectedCountryB.code.toLowerCase()}.png 2x" src="https://flagcdn.com/w20/${selectedCountryB.code.toLowerCase()}.png" alt="" style="margin-right: 5px;" />` : ''} Apostar en ${teamBName}</p>
-                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">$${stakeB.toFixed(2)}</p>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">a cuota ${oddsB}</p>
+                            <p class="font-semibold text-gray-800 dark:text-white flex items-center justify-center">${oddsB === underdogOdds ? teamBFlag : teamAFlag} Apostar en ${underdogTeam}</p>
+                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">$${betOnUnderdog.toFixed(2)}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">a cuota ${underdogOdds}</p>
                         </div>
                     </div>
-                    <div class="mt-4 bg-blue-100 dark:bg-blue-900/50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                        <p class="font-bold text-gray-800 dark:text-white">Resultados Garantizados:</p>
-                        <ul class="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 mt-2">
-                            <li>Inversión total: <strong>$${totalAmount.toFixed(2)}</strong></li>
-                            <li>Retorno garantizado: <strong>$${returnAmount.toFixed(2)}</strong></li>
-                            <li>Ganancia neta segura: <strong class="text-green-600 dark:text-green-400">$${profit.toFixed(2)}</strong></li>
-                        </ul>
-                    </div>
+                    
                     <div class="mt-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg text-sm text-gray-700 dark:text-gray-300">
                         <p>Apuesta <strong>$${betOnFavorite.toFixed(2)}</strong> en ${favoriteTeam} (cuota ${favoriteOdds}).</p>
                         <p>Apuesta <strong>$${betOnUnderdog.toFixed(2)}</strong> en ${underdogTeam} (cuota ${underdogOdds}).</p>
                         <br>
-                        <p>Si gana ${favoriteTeam}: Recuperas <strong>$${returnFavorite.toFixed(2)}</strong> (ganancia neta: <strong>$${(returnFavorite - totalAmount).toFixed(2)}</strong>).</p>
-                        <p>Si gana ${underdogTeam}: Recuperas <strong>$${returnUnderdog.toFixed(2)}</strong> (ganancia neta: <strong>$${(returnUnderdog - totalAmount).toFixed(2)}</strong>).</p>
+                        ${strategyDetails}
                     </div>
                 `;
                 resultContainer.innerHTML = resultHTML;
@@ -312,7 +390,10 @@
         calculateBtn.addEventListener("click", calculateBets);
         clearBtn.addEventListener("click", clearForm);
         darkModeToggle.addEventListener("click", toggleDarkMode);
-
+        classicSurebetToggle.addEventListener("change", updateStrategyText);
+        
+        // Initial setup
+        updateStrategyText();
         const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         const savedTheme = localStorage.getItem("darkMode");
         if (savedTheme !== null) {
